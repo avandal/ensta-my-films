@@ -1,1 +1,79 @@
-<p>home works!</p>
+<div class="rounded shadow bg-white p-5">
+  <div class="row">
+    <div class="col-12 d-flex">
+      <h2 class="font-weight-white"><i class="fas fa-home"></i> Liste de personnes</h2>
+      <button class="btn btn-primary ms-auto" type="button" data-bs-toggle="modal" keyboard="false" data-bs-target="#propertiesFormModal"><i class="fas fa-plus"></i> Ajouter une personne</button>
+    </div>
+  </div>
+  <hr class="mt-1 mb-5 bg-dark">
+  <div class="row">
+    <div class="col-12 shadow-sm p-4 mb-3 bg-light" *ngFor="let person of people; let id = index">
+      <div class="row gx-3">
+        <div class="col">
+          <div class="d-flex">
+            <h3 class="font-weight-normal">{{ person.firstname }} {{ person.lastname }}</h3>
+            <div class="ms-auto">
+              <button class="btn btn-primary m-1" type="button" data-bs-toggle="modal" data-bs-target="#propertiesFormModal" (click)="onEditPerson(person, id)"><i class="fas fa-edit"></i></button>
+              <button class="btn btn-danger m-1" type="button" data-bs-toggle="modal" data-bs-target="#deleteConfirmModal" (click)="onRemovePerson(id)"><i class="fas fa-trash"></i></button>
+            </div>
+          </div>
+          <p class="text-success" *ngIf="person.student">Etudiant</p>
+          <p class="text-danger" *ngIf="!person.student">Pas étudiant</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="propertiesFormModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <form [formGroup]="personForm" (ngSubmit)="onCreatePerson()">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Edition d'un bien</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" (click)="abortEdit()" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row g-2">
+            <div class="col-6">
+              <input type="text" placeholder="Nom" class="form-control" formControlName="lastname">
+            </div>
+            <div class="col-6">
+              <input type="text" placeholder="Prénom" class="form-control" formControlName="firstname">
+            </div>
+            <div class="col-6">
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" formControlName="student">
+                <label class="form-check-label" for="flexSwitchCheckDefault">
+                  <span class="text-success" *ngIf="personForm.value.student">Etudiant</span>
+                  <span class="text-danger" *ngIf="!personForm.value.student">Pas étudiant</span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="abortEdit()">Annuler</button>
+          <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" [disabled]="personForm.invalid">Enregistrer</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Property Modal -->
+<div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Êtes-vous sûr de vouloir supprimer cette personne ?</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="onConfirmRemove()">Confirmer</button>
+      </div>
+    </div>
+  </div>
+</div>
